@@ -4,11 +4,11 @@ import com.gylgroup.fyc.application.auth.dto.LoginRequest;
 import com.gylgroup.fyc.application.auth.dto.LoginResponse;
 import com.gylgroup.fyc.application.auth.port.in.LoginUseCase;
 import com.gylgroup.fyc.domain.ports.out.JwtTokenProviderPort;
-import com.gylgroup.fyc.infrastructure.security.UserDetailsImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails; // Importa la interfaz
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,8 +30,8 @@ public class LoginUseCaseImpl implements LoginUseCase {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        // El puerto JwtTokenProviderPort debe ser ajustado para recibir UserDetailsImpl
+        // Usamos la interfaz UserDetails, que es más genérica y segura
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String token = jwtTokenProviderPort.generateToken(userDetails);
 
         return new LoginResponse(token);

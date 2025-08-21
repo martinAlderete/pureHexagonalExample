@@ -54,12 +54,6 @@ public class DataInitializer implements CommandLineRunner {
             String plainPassword = "admin123";
             String hashedPassword = passwordEncoder.encode(plainPassword);
 
-            // Línea de depuración para ver la contraseña encriptada
-            System.out.println("====================================================================");
-            System.out.println(">>> Creando usuario 'admin@gylgroup.com' con contraseña 'admin123'");
-            System.out.println(">>> Contraseña encriptada guardada: " + hashedPassword);
-            System.out.println("====================================================================");
-
             EmployeeEntity adminUser = new EmployeeEntity();
             adminUser.setEmail("admin@gylgroup.com");
             adminUser.setPassword(hashedPassword);
@@ -73,6 +67,23 @@ public class DataInitializer implements CommandLineRunner {
 
             userRepository.save(adminUser);
             System.out.println(">>> Usuario administrador de prueba creado con éxito.");
+
+            // ====================================================================
+            //              BLOQUE DE DIAGNÓSTICO TEMPORAL
+            // ====================================================================
+            System.out.println(">>> INICIANDO PRUEBA DE PASSWORD ENCODER...");
+            String rawPassword = "admin123";
+            String encodedPasswordFromDB = adminUser.getPassword();
+
+            boolean passwordsMatch = passwordEncoder.matches(rawPassword, encodedPasswordFromDB);
+
+            System.out.println(">>> Contraseña plana de prueba: " + rawPassword);
+            System.out.println(">>> Contraseña hasheada en DB: " + encodedPasswordFromDB);
+            System.out.println(">>> ¿Las contraseñas coinciden?: " + (passwordsMatch ? "SÍ" : "NO"));
+            if (!passwordsMatch) {
+                System.err.println("!!!!!! ALERTA: LA VERIFICACIÓN DEL PASSWORD ENCODER HA FALLADO. ESTE ES EL PROBLEMA. !!!!!!");
+            }
+            System.out.println("====================================================================");
         }
     }
 }

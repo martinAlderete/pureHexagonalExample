@@ -23,12 +23,14 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         try {
             LoginResponse response = loginUseCase.login(loginRequest);
-            // Registro de evento exitoso (usando un logger real)
+            // Este log solo se mostrará si todo el proceso fue exitoso
             System.out.println("Login exitoso para: " + loginRequest.getIdentifier());
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            // Registro de evento fallido
-            System.out.println("Intento de login fallido para: " + loginRequest.getIdentifier());
+            // Este bloque captura cualquier error inesperado durante el login
+            System.err.println("Error durante el login para: " + loginRequest.getIdentifier());
+            // La siguiente línea es clave para depurar: imprime el error detallado en la consola
+            e.printStackTrace();
             return ResponseEntity.status(401).body(null); // Unauthorized
         }
     }
