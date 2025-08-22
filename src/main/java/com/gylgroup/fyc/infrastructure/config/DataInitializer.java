@@ -1,4 +1,4 @@
-package com.gylgroup.fyc.infrastructure.configuration;
+package com.gylgroup.fyc.infrastructure.config;
 
 import com.gylgroup.fyc.infrastructure.entities.EmployeeEntity;
 import com.gylgroup.fyc.infrastructure.entities.PermissionEntity;
@@ -68,22 +68,7 @@ public class DataInitializer implements CommandLineRunner {
             userRepository.save(adminUser);
             System.out.println(">>> Usuario administrador de prueba creado con éxito.");
 
-            // ====================================================================
-            //              BLOQUE DE DIAGNÓSTICO TEMPORAL
-            // ====================================================================
-            System.out.println(">>> INICIANDO PRUEBA DE PASSWORD ENCODER...");
-            String rawPassword = "admin123";
-            String encodedPasswordFromDB = adminUser.getPassword();
 
-            boolean passwordsMatch = passwordEncoder.matches(rawPassword, encodedPasswordFromDB);
-
-            System.out.println(">>> Contraseña plana de prueba: " + rawPassword);
-            System.out.println(">>> Contraseña hasheada en DB: " + encodedPasswordFromDB);
-            System.out.println(">>> ¿Las contraseñas coinciden?: " + (passwordsMatch ? "SÍ" : "NO"));
-            if (!passwordsMatch) {
-                System.err.println("!!!!!! ALERTA: LA VERIFICACIÓN DEL PASSWORD ENCODER HA FALLADO. ESTE ES EL PROBLEMA. !!!!!!");
-            }
-            System.out.println("====================================================================");
         }
     }
 }
