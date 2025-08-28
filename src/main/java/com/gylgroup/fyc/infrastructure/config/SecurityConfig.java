@@ -4,6 +4,7 @@ import com.gylgroup.fyc.infrastructure.config.security.JwtAuthenticationFilter;
 import com.gylgroup.fyc.infrastructure.config.security.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -19,11 +20,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-//TODO: Ver si va o no esta annotation @EnableMethodSecurity
 public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
-    private final JwtAuthenticationFilter jwtAuthFilter; // Inyectamos el nuevo filtro
+    private final JwtAuthenticationFilter jwtAuthFilter;
 
     public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthenticationFilter jwtAuthFilter) {
         this.userDetailsService = userDetailsService;
@@ -53,12 +53,15 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/api/login", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/providers").hasAnyAuthority("GESTOR_PROVEEDOR", "SUPERADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/providers").hasAnyAuthority("GESTOR_PROVEEDOR", "SUPERADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/providers/**").hasAnyAuthority("GESTOR_PROVEEDOR", "SUPERADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider()) // Aseguramos que nuestro proveedor esté registrado
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // TODO: Ver si se puede poner arriba authorizehttprequest
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
