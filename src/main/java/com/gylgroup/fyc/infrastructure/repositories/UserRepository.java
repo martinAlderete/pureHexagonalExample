@@ -13,4 +13,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     // Nuevo método para buscar por CUIT en la tabla de proveedores
     @Query("SELECT p FROM ProviderEntity p WHERE p.cuit = :cuit")
     Optional<UserEntity> findByCuit(@Param("cuit") String cuit);
+
 }

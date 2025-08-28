@@ -1,7 +1,10 @@
+
+
 package com.gylgroup.fyc.infrastructure.config;
 
 import com.gylgroup.fyc.infrastructure.entities.EmployeeEntity;
 import com.gylgroup.fyc.infrastructure.entities.PermissionEntity;
+import com.gylgroup.fyc.infrastructure.entities.ProviderEntity;
 import com.gylgroup.fyc.infrastructure.entities.RoleEntity;
 import com.gylgroup.fyc.infrastructure.entities.RoleName;
 import com.gylgroup.fyc.infrastructure.repositories.RoleRepository;
@@ -27,9 +30,10 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // --- Creación de Roles y Permisos (solo si no existen) ---
+        //Creación de Roles y Permisos (solo si no existen)
         if (roleRepository.count() == 0) {
             System.out.println(">>> No se encontraron roles, inicializando datos...");
+
             PermissionEntity crearUsuarios = new PermissionEntity("CREATE_USERS");
             PermissionEntity verDashboardAdmin = new PermissionEntity("VIEW_ADMIN_DASHBOARD");
             PermissionEntity asignarProveedores = new PermissionEntity("ASSIGN_PROVIDERS");
@@ -45,18 +49,17 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println(">>> Roles y Permisos inicializados correctamente.");
         }
 
-        // --- Creación de Usuario Administrador de Prueba (solo si no existen usuarios) ---
+        // Creación de Usuarios de Prueba (solo si no existen)
         if (userRepository.count() == 0) {
-            System.out.println(">>> No se encontraron usuarios, creando usuario de prueba...");
+            System.out.println(">>> No se encontraron usuarios, creando usuarios de prueba...");
+
+            //Creación de Usuario Administrador de prueba
             RoleEntity superadminRole = roleRepository.findByName(RoleName.SUPERADMIN)
                     .orElseThrow(() -> new RuntimeException("Error: Rol SUPERADMIN no encontrado."));
 
-            String plainPassword = "admin123";
-            String hashedPassword = passwordEncoder.encode(plainPassword);
-
             EmployeeEntity adminUser = new EmployeeEntity();
             adminUser.setEmail("admin@gylgroup.com");
-            adminUser.setPassword(hashedPassword);
+            adminUser.setPassword(passwordEncoder.encode("admin123"));
             adminUser.setRole(superadminRole);
             adminUser.setName("Admin");
             adminUser.setLastName("User");
@@ -64,9 +67,33 @@ public class DataInitializer implements CommandLineRunner {
             adminUser.setAccountNonExpired(true);
             adminUser.setAccountNonLocked(true);
             adminUser.setCredentialsNonExpired(true);
-
             userRepository.save(adminUser);
             System.out.println(">>> Usuario administrador de prueba creado con éxito.");
+
+
+           //Creacion de Usuario Provider de prueba
+            RoleEntity proveedorRole = roleRepository.findByName(RoleName.PROVEEDOR)
+                    .orElseThrow(() -> new RuntimeException("Error: Rol PROVEEDOR no encontrado."));
+
+
+            ProviderEntity providerUser = new ProviderEntity();
+
+
+            providerUser.setCuit("30123456789");
+            providerUser.setBusinessName("Empresa Proveedora SRL");
+
+
+            providerUser.setEmail("proveedor@empresa.com");
+            providerUser.setPassword(passwordEncoder.encode("prov123"));
+            providerUser.setRole(proveedorRole);
+            providerUser.setEnabled(true);
+            providerUser.setAccountNonExpired(true);
+            providerUser.setAccountNonLocked(true);
+            providerUser.setCredentialsNonExpired(true);
+
+
+            userRepository.save(providerUser);
+            System.out.println(">>> Usuario proveedor de prueba creado con éxito.");
 
 
         }

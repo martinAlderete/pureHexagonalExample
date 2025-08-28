@@ -1,4 +1,4 @@
-package com.gylgroup.fyc.infrastructure.security;
+package com.gylgroup.fyc.infrastructure.config.security;
 
 import com.gylgroup.fyc.infrastructure.entities.UserEntity;
 import org.springframework.security.core.GrantedAuthority;

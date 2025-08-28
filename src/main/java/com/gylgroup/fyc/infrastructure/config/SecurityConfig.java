@@ -1,7 +1,7 @@
 package com.gylgroup.fyc.infrastructure.config;
 
-import com.gylgroup.fyc.infrastructure.security.JwtAuthenticationFilter;
-import com.gylgroup.fyc.infrastructure.security.UserDetailsServiceImpl;
+import com.gylgroup.fyc.infrastructure.config.security.JwtAuthenticationFilter;
+import com.gylgroup.fyc.infrastructure.config.security.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+//TODO: Ver si va o no esta annotation @EnableMethodSecurity
 public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
@@ -57,7 +58,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()) // Aseguramos que nuestro proveedor esté registrado
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // Añadimos nuestro filtro JWT
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // TODO: Ver si se puede poner arriba authorizehttprequest
 
         return http.build();
     }

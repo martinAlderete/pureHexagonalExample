@@ -17,7 +17,7 @@ public class RoleEntity {
     @Column(unique = true, nullable = false)
     private RoleName name;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)//Cascade sacar o no?
     @JoinTable(
             name = "roles_permissions",
             joinColumns = @JoinColumn(name = "role_id"),

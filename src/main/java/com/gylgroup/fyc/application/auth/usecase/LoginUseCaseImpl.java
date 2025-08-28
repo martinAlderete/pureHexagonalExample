@@ -3,35 +3,32 @@ package com.gylgroup.fyc.application.auth.usecase;
 import com.gylgroup.fyc.application.auth.dto.LoginRequest;
 import com.gylgroup.fyc.application.auth.dto.LoginResponse;
 import com.gylgroup.fyc.application.auth.port.in.LoginUseCase;
+import com.gylgroup.fyc.domain.ports.out.AuthenticationPort; // <-- Nueva dependencia
 import com.gylgroup.fyc.domain.ports.out.JwtTokenProviderPort;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails; // Importa la interfaz
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UserDetails;
 
-@Service
+
 public class LoginUseCaseImpl implements LoginUseCase {
 
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationPort authenticationPort;
     private final JwtTokenProviderPort jwtTokenProviderPort;
 
-    public LoginUseCaseImpl(AuthenticationManager authenticationManager, JwtTokenProviderPort jwtTokenProviderPort) {
-        this.authenticationManager = authenticationManager;
+    public LoginUseCaseImpl(AuthenticationPort authenticationPort, JwtTokenProviderPort jwtTokenProviderPort) {
+        this.authenticationPort = authenticationPort;
         this.jwtTokenProviderPort = jwtTokenProviderPort;
     }
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getIdentifier(), loginRequest.getPassword())
+        // 1. La lógica de autenticación ahora se delega a nuestro puerto.
+        UserDetails userDetails = authenticationPort.authenticate(
+                loginRequest.getIdentifier(),
+                loginRequest.getPassword()
         );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Usamos la interfaz UserDetails, que es más genérica y segura
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        // 2. Generamos el token usando los detalles del usuario autenticado.
         String token = jwtTokenProviderPort.generateToken(userDetails);
 
         return new LoginResponse(token);

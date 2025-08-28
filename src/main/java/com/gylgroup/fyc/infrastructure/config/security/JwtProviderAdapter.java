@@ -1,4 +1,4 @@
-package com.gylgroup.fyc.infrastructure.security;
+package com.gylgroup.fyc.infrastructure.config.security;
 
 import com.gylgroup.fyc.domain.ports.out.JwtTokenProviderPort;
 import io.jsonwebtoken.Claims;
