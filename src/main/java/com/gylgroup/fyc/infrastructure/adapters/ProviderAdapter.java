@@ -19,7 +19,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-@Primary
 public class ProviderAdapter implements ProviderModelPort {
 
     private final ProviderRepository providerRepository;

@@ -26,17 +26,17 @@ public class ProviderUseCaseFactory {
     }
 
     @Bean
-    public UpdateProvider updateProvider(ProviderModelPort providerModelPort) { // Pide el puerto
+    public UpdateProvider updateProvider(ProviderModelPort providerModelPort) {
         return new UpdateProviderImpl(providerModelPort);
     }
 
     @Bean
-    public GetAllProviders getAllProviders(ProviderModelPort providerModelPort) { // Pide el puerto
+    public GetAllProviders getAllProviders(ProviderModelPort providerModelPort) {
         return new GetAllProvidersImpl(providerModelPort);
     }
 
     @Bean
-    public DeactivateProvider deactivateProvider(ProviderModelPort providerModelPort) { // Pide el puerto
+    public DeactivateProvider deactivateProvider(ProviderModelPort providerModelPort) {
         return new DeactivateProviderImpl(providerModelPort);
     }
 }
