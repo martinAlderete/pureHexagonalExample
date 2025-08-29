@@ -1,38 +1,42 @@
 package com.gylgroup.fyc.infrastructure.factory;
 
 import com.gylgroup.fyc.application.provider.createProvider.usecase.CreateProviderImpl;
+import com.gylgroup.fyc.application.provider.createProvider.usecase.port.in.CreateProvider;
 import com.gylgroup.fyc.application.provider.deactivateProvider.usecase.DeactivateProviderImpl;
+import com.gylgroup.fyc.application.provider.deactivateProvider.usecase.port.in.DeactivateProvider;
 import com.gylgroup.fyc.application.provider.getAllProviders.usecase.GetAllProvidersImpl;
+import com.gylgroup.fyc.application.provider.getAllProviders.usecase.port.in.GetAllProviders;
 import com.gylgroup.fyc.application.provider.updateProvider.usecase.UpdateProviderImpl;
-import com.gylgroup.fyc.infrastructure.services.ProviderService;
+import com.gylgroup.fyc.application.provider.updateProvider.usecase.port.in.UpdateProvider;
+import com.gylgroup.fyc.domain.ports.out.ProviderModelPort;
+import com.gylgroup.fyc.infrastructure.repositories.RoleRepository;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-/**
- * ==========================================
- * LA FÁBRICA DE CASOS DE USO (POJO)
- * ==========================================
- * Porqué: Esta clase es un constructor manual. No sabe nada de Spring.
- * Recibe el "colector" (ProviderService) y usa sus herramientas para
- * crear instancias puras de nuestros casos de uso, que también son POJOs.
- */
+@Configuration
 public class ProviderUseCaseFactory {
 
-    public static CreateProviderImpl buildCreateProvider(ProviderService service) {
-        return new CreateProviderImpl(
-                service.providerModelPort,
-                service.roleRepository,
-                service.passwordEncoder
-        );
+    @Bean
+    public CreateProvider createProvider(
+            ProviderModelPort providerModelPort,
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder) {
+        return new CreateProviderImpl(providerModelPort, roleRepository, passwordEncoder);
     }
 
-    public static UpdateProviderImpl buildUpdateProvider(ProviderService service) {
-        return new UpdateProviderImpl(service.providerModelPort);
+    @Bean
+    public UpdateProvider updateProvider(ProviderModelPort providerModelPort) { // Pide el puerto
+        return new UpdateProviderImpl(providerModelPort);
     }
 
-    public static GetAllProvidersImpl buildGetAllProviders(ProviderService service) {
-        return new GetAllProvidersImpl(service.providerModelPort);
+    @Bean
+    public GetAllProviders getAllProviders(ProviderModelPort providerModelPort) { // Pide el puerto
+        return new GetAllProvidersImpl(providerModelPort);
     }
 
-    public static DeactivateProviderImpl buildDeactivateProvider(ProviderService service) {
-        return new DeactivateProviderImpl(service.providerModelPort);
+    @Bean
+    public DeactivateProvider deactivateProvider(ProviderModelPort providerModelPort) { // Pide el puerto
+        return new DeactivateProviderImpl(providerModelPort);
     }
 }
