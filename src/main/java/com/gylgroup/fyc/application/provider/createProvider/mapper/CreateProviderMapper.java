@@ -12,7 +12,7 @@ public class CreateProviderMapper {
                 true, null, null);
     }
 
-    public CreateProviderResponse toResponse(Provider domain) {
+    public static CreateProviderResponse toResponse(Provider domain) {
         CreateProviderResponse response = new CreateProviderResponse();
         response.setId(domain.getId());
         response.setCompanyName(domain.getCompanyName());

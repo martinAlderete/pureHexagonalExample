@@ -5,7 +5,7 @@ import com.gylgroup.fyc.domain.ports.out.ProviderModelPort;
 import com.gylgroup.fyc.infrastructure.entities.ProviderEntity;
 import com.gylgroup.fyc.infrastructure.entities.RoleEntity;
 import com.gylgroup.fyc.infrastructure.entities.RoleName;
-import com.gylgroup.fyc.infrastructure.mappers.ProviderPersistenceMapper;
+import com.gylgroup.fyc.infrastructure.mappers.ProviderDboMapper;
 import com.gylgroup.fyc.infrastructure.repositories.ProviderRepository;
 import com.gylgroup.fyc.infrastructure.repositories.RoleRepository;
 import org.springframework.context.annotation.Primary;
@@ -23,11 +23,11 @@ import java.util.UUID;
 public class ProviderAdapter implements ProviderModelPort {
 
     private final ProviderRepository providerRepository;
-    private final ProviderPersistenceMapper mapper;
+    private final ProviderDboMapper mapper;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public ProviderAdapter(ProviderRepository providerRepository, ProviderPersistenceMapper mapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public ProviderAdapter(ProviderRepository providerRepository, ProviderDboMapper mapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.providerRepository = providerRepository;
         this.mapper = mapper;
         this.roleRepository = roleRepository;

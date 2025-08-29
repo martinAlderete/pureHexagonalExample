@@ -4,7 +4,7 @@ import com.gylgroup.fyc.application.provider.getAllProviders.dto.ProviderSummary
 import com.gylgroup.fyc.domain.models.Provider;
 
 public class GetAllProvidersMapper {
-    public ProviderSummaryResponse toResponse(Provider domain) {
+    public static ProviderSummaryResponse toResponse(Provider domain) {
         ProviderSummaryResponse res = new ProviderSummaryResponse();
         res.setId(domain.getId());
         res.setCompanyName(domain.getCompanyName());

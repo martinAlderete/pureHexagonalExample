@@ -30,7 +30,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        //Creación de Roles y Permisos (solo si no existen)
+        //Creacion de Roles y Permisos (solo si no existen)
         if (roleRepository.count() == 0) {
             System.out.println(">>> No se encontraron roles, inicializando datos...");
 
@@ -49,11 +49,11 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println(">>> Roles y Permisos inicializados correctamente.");
         }
 
-        // Creación de Usuarios de Prueba (solo si no existen)
+        // Creacion de Usuarios de Prueba (solo si no existen)
         if (userRepository.count() == 0) {
             System.out.println(">>> No se encontraron usuarios, creando usuarios de prueba...");
 
-            //Creación de Usuario Administrador de prueba
+            //Creacion de Usuario Administrador de prueba
             RoleEntity superadminRole = roleRepository.findByName(RoleName.SUPERADMIN)
                     .orElseThrow(() -> new RuntimeException("Error: Rol SUPERADMIN no encontrado."));
 
@@ -70,6 +70,29 @@ public class DataInitializer implements CommandLineRunner {
             userRepository.save(adminUser);
             System.out.println(">>> Usuario administrador de prueba creado con éxito.");
 
+
+
+
+       // Creacion de gestor proveedores
+            if (!userRepository.findByEmail("gestor@gylgroup.com").isPresent()) {
+                System.out.println(">>> Creando usuario GESTOR de prueba...");
+                RoleEntity gestorRole = roleRepository.findByName(RoleName.GESTOR_PROVEEDOR)
+                        .orElseThrow(() -> new RuntimeException("Error: Rol GESTOR_PROVEEDOR no encontrado."));
+
+                EmployeeEntity gestorUser = new EmployeeEntity();
+                gestorUser.setEmail("gestor@gylgroup.com");
+                gestorUser.setPassword(passwordEncoder.encode("gestor123")); // Contraseña para el gestor
+                gestorUser.setRole(gestorRole);
+                gestorUser.setName("Gestor");
+                gestorUser.setLastName("De Prueba");
+                gestorUser.setEnabled(true);
+                gestorUser.setAccountNonExpired(true);
+                gestorUser.setAccountNonLocked(true);
+                gestorUser.setCredentialsNonExpired(true);
+
+                userRepository.save(gestorUser);
+                System.out.println(">>> Usuario GESTOR de prueba creado con éxito.");
+            }
 
            //Creacion de Usuario Provider de prueba
             RoleEntity proveedorRole = roleRepository.findByName(RoleName.PROVEEDOR)

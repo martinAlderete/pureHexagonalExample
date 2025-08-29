@@ -1,42 +1,38 @@
 package com.gylgroup.fyc.infrastructure.factory;
 
-import com.gylgroup.fyc.application.provider.createProvider.mapper.CreateProviderMapper;
 import com.gylgroup.fyc.application.provider.createProvider.usecase.CreateProviderImpl;
-import com.gylgroup.fyc.application.provider.createProvider.usecase.port.in.CreateProvider;
 import com.gylgroup.fyc.application.provider.deactivateProvider.usecase.DeactivateProviderImpl;
-import com.gylgroup.fyc.application.provider.deactivateProvider.usecase.port.in.DeactivateProvider;
-import com.gylgroup.fyc.application.provider.getAllProviders.mapper.GetAllProvidersMapper;
 import com.gylgroup.fyc.application.provider.getAllProviders.usecase.GetAllProvidersImpl;
-import com.gylgroup.fyc.application.provider.getAllProviders.usecase.port.in.GetAllProviders;
-import com.gylgroup.fyc.domain.ports.out.ProviderModelPort;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import com.gylgroup.fyc.application.provider.updateProvider.usecase.UpdateProviderImpl;
+import com.gylgroup.fyc.infrastructure.services.ProviderService;
 
-@Configuration
+/**
+ * ==========================================
+ * LA FÁBRICA DE CASOS DE USO (POJO)
+ * ==========================================
+ * Porqué: Esta clase es un constructor manual. No sabe nada de Spring.
+ * Recibe el "colector" (ProviderService) y usa sus herramientas para
+ * crear instancias puras de nuestros casos de uso, que también son POJOs.
+ */
 public class ProviderUseCaseFactory {
 
-    @Bean
-    public CreateProviderMapper createProviderMapper() {
-        return new CreateProviderMapper();
+    public static CreateProviderImpl buildCreateProvider(ProviderService service) {
+        return new CreateProviderImpl(
+                service.providerModelPort,
+                service.roleRepository,
+                service.passwordEncoder
+        );
     }
 
-    @Bean
-    public GetAllProvidersMapper getAllProvidersMapper() {
-        return new GetAllProvidersMapper();
+    public static UpdateProviderImpl buildUpdateProvider(ProviderService service) {
+        return new UpdateProviderImpl(service.providerModelPort);
     }
 
-    @Bean
-    public CreateProvider createProvider(ProviderModelPort providerModelPort) {
-        return new CreateProviderImpl(providerModelPort);
+    public static GetAllProvidersImpl buildGetAllProviders(ProviderService service) {
+        return new GetAllProvidersImpl(service.providerModelPort);
     }
 
-    @Bean
-    public DeactivateProvider deactivateProvider(ProviderModelPort providerModelPort) {
-        return new DeactivateProviderImpl(providerModelPort);
-    }
-
-    @Bean
-    public GetAllProviders getAllProviders(ProviderModelPort providerModelPort) {
-        return new GetAllProvidersImpl(providerModelPort);
+    public static DeactivateProviderImpl buildDeactivateProvider(ProviderService service) {
+        return new DeactivateProviderImpl(service.providerModelPort);
     }
 }

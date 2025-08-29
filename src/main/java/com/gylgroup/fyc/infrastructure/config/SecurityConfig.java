@@ -57,6 +57,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/providers").hasAnyAuthority("GESTOR_PROVEEDOR", "SUPERADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/providers").hasAnyAuthority("GESTOR_PROVEEDOR", "SUPERADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/providers/**").hasAnyAuthority("GESTOR_PROVEEDOR", "SUPERADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/providers/**").hasAnyAuthority("GESTOR_PROVEEDOR", "SUPERADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

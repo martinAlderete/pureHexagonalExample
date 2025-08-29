@@ -5,16 +5,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 
+
 @Entity
 @Table(name = "providers")
 @PrimaryKeyJoinColumn(name = "user_id")
 public class ProviderEntity extends UserEntity {
 
-    @Column(unique = true, nullable = false, length = 11)
+    @Column(unique = true, nullable = false, length = 13)
     private String cuit;
     private String businessName;
     private String address;
     private String phone;
+
+    @Column(name = "first_login")
+    private boolean firstLogin;
 
     public String getCuit() { return cuit; }
     public void setCuit(String cuit) { this.cuit = cuit; }
@@ -24,4 +28,6 @@ public class ProviderEntity extends UserEntity {
     public void setAddress(String address) { this.address = address; }
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
+    public boolean isFirstLogin() { return firstLogin; }
+    public void setFirstLogin(boolean firstLogin) { this.firstLogin = firstLogin; }
 }
